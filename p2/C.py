@@ -1,29 +1,43 @@
-__author__ = 'aub3'
-
+import math
 from config import *
 from code.utils import *
- 
-#Load data from files
-train_data = loadfile(TRAIN_DATA, -1) #should be -1
-test_data = loadfile(TRIP_DATA_1, 100000) #should be 100000
 
-#Indicate values to extract (value to predict goes last)
-values = [5, 9, 10, 11, 12, 13, 8]
+WORD = "beaver"
 
-#Extract only the necesary values and True to transform to float
-train_data = special_format_set(values, train_data)
-test_data = special_format_set(values, test_data)
+#Load all the movies from the file 
+movies = load_all_movies(MOVIES_DATA, False)
+total_movies = len(movies)
 
-#Lists that hold only the values needed to calculate metrics
-k_results = []
-real_values = []
+#Dictionary that contains the decade and the counts of movies per decade P(Y)
+decade_counts = {}
 
-#For every data in the test data, we calculate the nearest neighbor's label and save it
-#we also save the real value to then compare
-result_location = len(test_data[0])-1
-for data in test_data:
-   k_results.append(float(nearest_neighbors(1, data, train_data)))
-   real_values.append(data[result_location])
+#Dictionary that contains the count of words "WORD" in movies per decade P(Y)
+word_counts = {}
 
-#Prints metrics of RMSE, Correlation Coefficient, and MAE    
-print_metrics(k_results, real_values)
+#P(WORD > 0 )
+P_WORD = 0
+
+#Load the decades in the dictionary (INITIAL_DECADE and FINAL_DECADE in config.py)
+init_decade = INITIAL_DECADE
+while(init_decade <= FINAL_DECADE):
+    decade_counts[init_decade] = 0
+    word_counts[init_decade] = 0
+    init_decade += 10
+
+#Update the dictionary with movies count
+for m in movies:
+    decade = math.trunc(float(m['year'])/10)*10
+    decade_counts[decade] += 1
+    if(findWholeWord(WORD, str(m['summary'])) == True):
+        word_counts[decade] += 1
+        P_WORD += 1
+
+P_WORD = float(P_WORD)/float(total_movies)
+
+#Update the dictionary with the probabilities
+for d in decade_counts:
+    decade_counts[d] = float(decade_counts[d])/float(total_movies)
+    word_counts[d] = float(word_counts[d])/float(total_movies)
+    decade_counts[d] = (word_counts[d]*decade_counts[d])/P_WORD #Bayes theorem
+
+draw_PMF(decade_counts, "Figure_C")
