@@ -26,7 +26,7 @@ print decade_counts
 for d in decade_counts:
     decade_counts[d] = float(decade_counts[d])/float(total_movies)
   
-draw_PMF(decade_counts)
+draw_PMF(decade_counts, "FIGURE_A")
 
 
 
