@@ -10,15 +10,22 @@ from config import *
 
 
 #*******************************************
+#Checks is word is in a string
+#******************************************
+def findWholeWord(word, total):
+    return word in total
+    
+#*******************************************
 #Draw a PMF from a dictionary
 #********************************************
-def draw_PMF(dictionary):
+def draw_PMF(dictionary, filename):
     #Y = list of probabilities, X = list of decades
     x = [d for d in dictionary]
     x.sort()
     y = [dictionary[d] for d in x]
     plt.bar(x,y, width = 10)
     plt.show()
+    plt.savefig(FIGURES+filename, dpi=120)
 
 #********************************************
 #Function to load movies from the file
