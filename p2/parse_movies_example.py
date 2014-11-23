@@ -25,6 +25,8 @@ def load_all_movies(filename, debug):
             if current_movie:
                 # Fix up description and send it on
                 current_movie['summary'] = "\n".join(current_movie['summary'] )
+                movie_list.append(current_movie)
+                counter +=1 
                 # yield current_movie
             current_movie = None
             try:
@@ -42,8 +44,8 @@ def load_all_movies(filename, debug):
         if line.startswith("PL: ") and current_movie:
             # Add to the current movie's description
             current_movie['summary'].append(line.replace("PL: ",""))
-            movie_list.append(current_movie)
-            counter += 1
+
+
     print "Skipped",skipped
     return movie_list
 

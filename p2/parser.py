@@ -1,6 +1,6 @@
 import gzip
 import re
-def load_all_movies(filename):
+def load_all_movies(filename, debug):
     """
     Load and parse 'plot.list.gz'. Yields each consecutive movie as a dictionary:
         {"title": "The movie's title",
@@ -10,7 +10,7 @@ def load_all_movies(filename):
         }
     You can download `plot.list.gz` from http://www.imdb.com/interfaces
     """
-
+    counter = 0
     movie_list = [] 
 
     assert "plot.list.gz" in filename # Or whatever you called it
@@ -18,11 +18,16 @@ def load_all_movies(filename):
     movie_regexp = re.compile("MV: ((.*?) \(([0-9]+).*\)(.*))")
     skipped = 0
     for line in gzip.open(filename):
+        if counter > 20 and debug == True:
+            return movie_list
+
         if line.startswith("MV"):
             if current_movie:
                 # Fix up description and send it on
                 current_movie['summary'] = "\n".join(current_movie['summary'] )
-                yield current_movie
+                movie_list.append(current_movie)
+                counter +=1 
+                # yield current_movie
             current_movie = None
             try:
                 identifier, title, year, episode = movie_regexp.match(line).groups()
@@ -39,14 +44,11 @@ def load_all_movies(filename):
         if line.startswith("PL: ") and current_movie:
             # Add to the current movie's description
             current_movie['summary'].append(line.replace("PL: ",""))
-            movie_list.append(current_movie)
+
 
     print "Skipped",skipped
+    return movie_list
 
-    print movie_list[:5]
+# all_movies = list(load_all_movies("/Users/rachel/CS5785/Homework_3/plot.list.gz"))
  
- 
-all_movies = list(load_all_movies("/Users/rachel/CS5785/Homework_3/plot.list.gz"))
- 
-len(all_movies)
 # => 379451
