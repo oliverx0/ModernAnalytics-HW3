@@ -2,7 +2,7 @@ import math
 from config import *
 from code.utils import *
 
-WORD = "radio"
+WORD = "beaver"
 
 #Load all the movies from the file 
 movies = load_balanced_movies(MOVIES_DATA, False)
@@ -42,4 +42,4 @@ for d in decade_counts:
     word_counts[d] = float(word_counts[d])/float(total_movies)
     decade_counts[d] = (word_counts[d]*decade_counts[d])/P_WORD #Bayes theorem
 
-draw_PMF(decade_counts, "Figure_E")
+draw_PMF(decade_counts, "Figure_F")

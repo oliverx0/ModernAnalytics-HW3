@@ -6,6 +6,7 @@ import numpy as np
 import gzip
 import re
 import matplotlib.pyplot as plt
+import random
 from config import *
 
 
@@ -84,33 +85,35 @@ def load_all_movies(filename, debug):
 
 def load_balanced_movies(filename, debug):
     """
-    Load and parse 'plot.list.gz' for 6000 first movies in each decade. Yields each consecutive movie as a dictionary:
+    Load and parse 'plot.list.gz' for 6000 first movies in each decade. Yields each consecutive movie as a dictionary in a list:
         {"title": "The movie's title",
          "year": The decade of the movie, like 1950 or 1980,
          "identifier": Full key of IMDB's text string,
          "summary": "The movie's plot summary"
         }
     You can download `plot.list.gz` from http://www.imdb.com/interfaces
+
+    Returns list of dictionaries of all movies, is 54,000 samples long
     """
     counter = 0
     movie_list = [] 
+    movie_list_balanced = []
+    decade_sample = {}
 
     assert "plot.list.gz" in filename # Or whatever you called it
     current_movie = None
     movie_regexp = re.compile("MV: ((.*?) \(([0-9]+).*\)(.*))")
     skipped = 0
-    
+
     for line in gzip.GzipFile(filename, 'r'): #open(filename):
         if counter > DEBUG_MAX_COUNT and debug == True:
-            return movie_list
+            return movie_list_balanced
 
         if line.startswith("MV"):
             if current_movie:
                 # Fix up description and send it on
-                current_movie['summary'] = "\n".join(current_movie['summary'])
-                movie_list.append(current_movie)
-                counter +=1 
-                # yield current_movie
+                current_movie['summary'] = "\n".join(current_movie['summary'])            
+                movie_list.append(current_movie)    
             current_movie = None
             try:
                 identifier, title, year, episode = movie_regexp.match(line).groups()
@@ -130,5 +133,21 @@ def load_balanced_movies(filename, debug):
             # Add to the current movie's description
             current_movie['summary'].append(line.replace("PL: ",""))
 
-    print "Skipped",skipped
-    return movie_list
+    init_decade = INITIAL_DECADE
+    while(init_decade <= FINAL_DECADE):
+        decade_sample[init_decade] = []
+        init_decade += 10        
+
+    for m in movie_list:
+        decade = m['year']
+        decade_sample[decade].append(m)
+
+    for d in decade_sample:
+        decade_sample[d] = decade_sample[d][0:6000]
+        movie_list_balanced += decade_sample[d]
+    
+    print "Skipped",skipped    
+    return movie_list_balanced
+
+    
+
