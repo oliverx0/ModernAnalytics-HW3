@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm, graphicx}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+
+\usepackage{bbm}
+\pagestyle{fancy}
+
+\linespread{1}
+
+\lhead{\small{CS 5785}}
+\chead{\small{Homework \# 3}}
+\rhead{\small{Oliver Hoffman\\Rachel Mayer}}
+
+\newenvironment{packed_enum}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}
+
+\begin{document}
+\section*{\normalsize{NAIVE BAYES CLASSIFICATION DESIGN}}
+
+\begin{enumerate}
+\item[1a)] P(X$\mid$Y) = $\frac{P(X \cup Y)}{P(Y)}$ = $\frac{P(X \cup Y)}{P(X)}$ = P(Y$\mid$X)
+\\
+P(X$\mid$Y)P(Y) = P(Y$\mid$X)P(X)
+\\
+P(Y$\mid$X) = $\frac{P(X \mid Y) P(Y)}{P(Y)}$
+
+\item[1b)] This equation is always true and makes no assumptions on \textit{Y, X} only that P(X) and P(Y) $>$ 0.
+
+\item[1c)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(X_1,X_2, . . . ,X_{|W|} \mid Y)P(Y)}{P(X_1,X_2, . . . ,X_{|W|} }$
+
+\item[1d)] P(Y) is the probability of decade $C_i$ before X is observed. 
+\end{enumerate}
+
+\end{document}

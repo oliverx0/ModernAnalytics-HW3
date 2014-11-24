@@ -1,36 +1,30 @@
-import parse_movies_example as h
 import math
-import matplotlib.pyplot as plt
+from config import *
+from code.utils import *
 
-movies = h.load_all_movies('../plot.list.gz', True)
+#Load all the movies from the file 
+movies = load_all_movies(MOVIES_DATA, False)
 total_movies = len(movies)
 
-print movies
-y = []
-x = [1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010]
+#Dictionary that contains the decade and the counts of movies per decade
+decade_counts = {}
 
-# print len(movies)
-decade_counts = {"1930":0, "1940":0, "1950":0, "1960":0, "1970":0, "1980":0, "1990":0, "2000":0, "2010":0}
+#Load the decades in the dictionary (INITIAL_DECADE and FINAL_DECADE in config.py)
+init_decade = INITIAL_DECADE
+while(init_decade <= FINAL_DECADE):
+    decade_counts[init_decade] = 0
+    init_decade += 10
 
-## dictionary of decades and their respective movie_counts
-for m in movies: 
-    decade = math.trunc(float(m['year'])/10)*10
-    # if "YouTube" in m['summary']:
-    	decade_counts[str(decade)] += 1
+#Update the dictionary with movies count
+for m in movies:
+    decade = m['year']
+    decade_counts[decade] += 1
 
-print decade_counts
-## calculates probabilities of each decade
+#Update the dictionary with the probabilities
 for d in decade_counts:
     decade_counts[d] = float(decade_counts[d])/float(total_movies)
-    
-for i in x:
-    y.append(decade_counts[str(i)])
-
-    
-
-plt.bar(x,y, width = 10)
-# plt.show()
-# plt.savefig("2a.jpeg")
+  
+draw_PMF(decade_counts, "Figure_A")
 
 
 

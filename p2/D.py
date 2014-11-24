@@ -1,44 +1,43 @@
-__author__ = 'aub3'
-
+import math
 from config import *
 from code.utils import *
 
+WORD = "the"
 
-#Load data from files
-train_data = loadfile(TRAIN_DATA, 1000) #should be -1
-test_data = loadfile(TRIP_DATA_1, 4000) #should be 10000
+#Load all the movies from the file 
+movies = load_all_movies(MOVIES_DATA, False)
+total_movies = len(movies)
 
-#Indicate values to extract (value to predict goes last)
-values = [5, 9, 10, 11, 12, 13, 8]
+#Dictionary that contains the decade and the counts of movies per decade P(Y)
+decade_counts = {}
 
-#Extract only the necesary values and True to transform to float
-train_data = special_format_set(values, train_data)
-test_data = special_format_set(values, test_data)
+#Dictionary that contains the count of words "WORD" in movies per decade P(Y)
+word_counts = {}
 
-#Max and min value of each attribute
-max_vals = []
-min_vals = []
+#P(WORD > 0 )
+P_WORD = 0
 
-temp_train = np.array(train_data).T
-temp_test = np.array(test_data).T
+#Load the decades in the dictionary (INITIAL_DECADE and FINAL_DECADE in config.py)
+init_decade = INITIAL_DECADE
+while(init_decade <= FINAL_DECADE):
+    decade_counts[init_decade] = 0
+    word_counts[init_decade] = 0
+    init_decade += 10
 
-for data in temp_train:
-    max_vals.append(np.amax(data))
-    min_vals.append(np.amin(data))
-    
-train_data_scaled = scale_set(train_data, max_vals, min_vals)    
-test_data_scaled =  scale_set(test_data, max_vals, min_vals) 
+#Update the dictionary with movies count
+for m in movies:
+    decade = m['year']
+    decade_counts[decade] += 1
+    if(findWholeWord(WORD, str(m['summary'])) == True):
+        word_counts[decade] += 1
+        P_WORD += 1
 
-#Lists that hold only the values needed to calculate metrics
-k_results = []
-real_values = []
+P_WORD = float(P_WORD)/float(total_movies)
 
-#For every data in the test data, we calculate the nearest neighbor's label and save it
-#we also save the real value to then compare
-result_location = len(test_data[0])-1
-for data in test_data_scaled:
-   k_results.append(float(nearest_neighbors(1, data, train_data_scaled)))
-   real_values.append(data[result_location])
+#Update the dictionary with the probabilities
+for d in decade_counts:
+    decade_counts[d] = float(decade_counts[d])/float(total_movies)
+    word_counts[d] = float(word_counts[d])/float(total_movies)
+    decade_counts[d] = (word_counts[d]*decade_counts[d])/P_WORD #Bayes theorem
 
-#Prints metrics of RMSE, Correlation Coefficient, and MAE    
-print_metrics(k_results, real_values)
+draw_PMF(decade_counts, "Figure_D")
