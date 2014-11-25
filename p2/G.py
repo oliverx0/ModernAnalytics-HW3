@@ -8,8 +8,6 @@ WORD = "the"
 movies = load_balanced_movies(MOVIES_DATA, False)
 total_movies = len(movies)
 
-#Dictionary from which to sample from
-
 #Dictionary that contains the decade and the counts of movies per decade
 decade_counts = {}
 

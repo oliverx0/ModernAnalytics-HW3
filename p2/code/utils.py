@@ -95,10 +95,19 @@ def load_balanced_movies(filename, debug):
 
     Returns list of dictionaries of all movies, is 54,000 samples long
     """
-    counter = 0
     movie_list = [] 
     movie_list_balanced = []
     decade_sample = {}
+    decade_count = {}
+    decade_counter = 0
+    counter = 0
+
+    init_decade = INITIAL_DECADE
+    while(init_decade <= FINAL_DECADE):
+        decade_sample[init_decade] = []
+        decade_count[init_decade] = 0
+        init_decade += 10    
+        decade_counter += 1
 
     assert "plot.list.gz" in filename # Or whatever you called it
     current_movie = None
@@ -106,14 +115,25 @@ def load_balanced_movies(filename, debug):
     skipped = 0
 
     for line in gzip.GzipFile(filename, 'r'): #open(filename):
-        if counter > DEBUG_MAX_COUNT and debug == True:
+        #if counter > DEBUG_MAX_COUNT and debug == True:
+        #    return movie_list_balanced
+        if counter >= decade_counter:
+            print "Skipped",skipped    
+            print "DECADE COUNT: ", decade_count
             return movie_list_balanced
-
         if line.startswith("MV"):
             if current_movie:
                 # Fix up description and send it on
-                current_movie['summary'] = "\n".join(current_movie['summary'])            
-                movie_list.append(current_movie)    
+                decade = current_movie['year']
+                current_movie['summary'] = "\n".join(current_movie['summary']) 
+                if((debug == False and (decade_count[decade] < BALANCED_COUNT)) or (debug == True and (decade_count[decade] < DEBUG_MAX_COUNT))):
+                    decade_sample[decade].append(current_movie)
+                    decade_count[decade] += 1
+                    if((debug == False and decade_count[decade] == BALANCED_COUNT) or (debug == True and decade_count[decade] == DEBUG_MAX_COUNT)):
+                        counter += 1
+                        movie_list_balanced += decade_sample[decade]
+
+                #movie_list.append(current_movie)    
             current_movie = None
             try:
                 identifier, title, year, episode = movie_regexp.match(line).groups()
@@ -133,21 +153,15 @@ def load_balanced_movies(filename, debug):
             # Add to the current movie's description
             current_movie['summary'].append(line.replace("PL: ",""))
 
-    init_decade = INITIAL_DECADE
-    while(init_decade <= FINAL_DECADE):
-        decade_sample[init_decade] = []
-        init_decade += 10        
+    #for m in movie_list:
+    #    decade = m['year']
+    #    decade_sample[decade].append(m)
 
-    for m in movie_list:
-        decade = m['year']
-        decade_sample[decade].append(m)
-
-    for d in decade_sample:
-        decade_sample[d] = decade_sample[d][0:6000]
-        movie_list_balanced += decade_sample[d]
+    #for d in decade_sample:
+    #    #decade_sample[d] = decade_sample[d][0:6000]
+    #    movie_list_balanced += decade_sample[d]
     
-    print "Skipped",skipped    
-    return movie_list_balanced
+    
 
     
 

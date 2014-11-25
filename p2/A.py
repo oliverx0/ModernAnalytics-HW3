@@ -20,11 +20,10 @@ for m in movies:
     decade = m['year']
     decade_counts[decade] += 1
 
+print decade_counts
+
 #Update the dictionary with the probabilities
 for d in decade_counts:
     decade_counts[d] = float(decade_counts[d])/float(total_movies)
   
 draw_PMF(decade_counts, "Figure_A")
-
-
-

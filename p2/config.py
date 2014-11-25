@@ -14,5 +14,6 @@ MOVIES_DATA = os.path.join(__location__, 'data/plot.list.gz') # small data files
 FIGURES = os.path.join(__location__, 'figures/') # figure folder
 
 DEBUG_MAX_COUNT = 20
+BALANCED_COUNT = 6000
 
 
