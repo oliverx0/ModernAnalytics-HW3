@@ -153,14 +153,16 @@ def load_balanced_movies(filename, debug):
             # Add to the current movie's description
             current_movie['summary'].append(line.replace("PL: ",""))
 
-    #for m in movie_list:
-    #    decade = m['year']
-    #    decade_sample[decade].append(m)
+def plot_cleanup(text):
+    """ removes all characters and numbers from the plot and leave's a clen text review"""
+    for t in text:
+        if t == " " or t.isalpha():
+            return "".join(t)
+    # text.replace("\n", " ")
+    # for s in text:
+    #     text.lower()
+    return text
 
-    #for d in decade_sample:
-    #    #decade_sample[d] = decade_sample[d][0:6000]
-    #    movie_list_balanced += decade_sample[d]
-    
     
 
     

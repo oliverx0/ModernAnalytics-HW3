@@ -8,6 +8,7 @@ WORD = "radio"
 movies = load_balanced_movies(MOVIES_DATA, False)
 total_movies = len(movies)
 
+print total_movies
 #Dictionary that contains the decade and the counts of movies per decade
 decade_counts = {}
 
@@ -40,4 +41,4 @@ for d in decade_counts:
     word_counts[d] = float(word_counts[d])/float(total_movies)
     decade_counts[d] = (word_counts[d]*decade_counts[d])/P_WORD #Bayes theorem
 
-draw_PMF(decade_counts, "Figure_E")
+# draw_PMF(decade_counts, "Figure_E")
