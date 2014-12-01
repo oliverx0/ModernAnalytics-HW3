@@ -20,7 +20,7 @@
 }{\end{itemize}}
 
 \begin{document}
-\section*{\normalsize{NAIVE BAYES CLASSIFICATION DESIGN}}
+\section*{\normalsize{1   NAIVE BAYES CLASSIFICATION DESIGN}}
 
 \begin{enumerate}
 \item[1a)] P(X$\mid$Y) = $\frac{P(X \cup Y)}{P(Y)}$ = $\frac{P(X \cup Y)}{P(X)}$ = P(Y$\mid$X)
@@ -31,9 +31,38 @@ P(Y$\mid$X) = $\frac{P(X \mid Y) P(Y)}{P(Y)}$
 
 \item[1b)] This equation is always true and makes no assumptions on \textit{Y, X} only that P(X) and P(Y) $>$ 0.
 
-\item[1c)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(X_1,X_2, . . . ,X_{|W|} \mid Y)P(Y)}{P(X_1,X_2, . . . ,X_{|W|} }$
+\item[1c)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(X_1,X_2, . . . ,X_{|W|} \mid Y)P(Y)}{P(X_1,X_2, . . . ,X_{|W|}) }$
 
-\item[1d)] P(Y) is the probability of decade $C_i$ before X is observed. 
+\item[1d)] $P(Y)$ is the probability of decade $C_i$ before X is observed. 
+
+\item[1e)] $P(X_1,X_2, . . . ,X_{|W|} \mid Y) = P(X_1 \mid Y)P(X_2,...,X_n\mid Y, X_1)$\\
+$= P(X_1 \mid Y)P(X_2\mid Y, X_1)P(X_3,...,X_n\mid Y, X_1,X_2)$\\
+$= P(X_1 \mid Y)P(X_2\mid Y, X_1)...P(X_{|W|}\mid Y, X_1,X_2, X_3,...,X_{n-1})$
+
+\item[1f)]
+
+\item[1g)]
+
+\item[1h)] The Naive Bayes assumptions means that the features are independent given the class, i.e assumes conditional independence between $X_i$ and $X_j$ for $i\neq j$ given $Y$. It is violated when 
+
+\item[1i)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)P(X_1\mid Y)P(X_2\mid Y)P(X_3\mid Y) ...P(X_n\mid Y)}{P(X_1,X_2, . . . ,X_{|W|})}$
+\\
+$P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)\prod_{i=1}^n(X_i\mid Y)}{P(X_1,X_2, . . . ,X_{|W|})}$
+
+
 \end{enumerate}
 
+
+
+\section*{\normalsize{2   THE MOMENT OF TRUTH}}
+\begin{enumerate}
+\item[1a)]
+
+\item[1b)] The underlying difference between them is in the assumptions they make is in regards to the distribution of the likelihood probabilities $P(X_i\mid Y)$. Under Gaussian NB, the likleihoods are assumed to be a Gaussian distribution. Multinomial NB assumes a multinomial distribution i.e that X. And finally Bernoulli NB assumes that each feature has a Bernoulli distribution, or that multiple features only take values 0 or 1. The main difference between Bernoulli and Multinomial is that when calculating the probabilities Multinomial distributions ignore that a particular feature $i$ had no count while Bernoulli would associate a penalty with that. 
+
+The closests one for us would be Multinomial, 
+
+Our classifier differs from all of these in that it makes no assumptions at all in the distribution of the data, or rather, it gives equal weight to each likelihood. 
+
+\end{enumerate}
 \end{document}
