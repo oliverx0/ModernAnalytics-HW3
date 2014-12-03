@@ -7,25 +7,22 @@ import numpy as np
 import pandas as pd
 import random
 
-movies = load_balanced_movies(MOVIES_DATA, True)
+movies = load_balanced_movies(MOVIES_DATA, False)
 data = pd.DataFrame(movies)
 
 summaries = data[['summary']]
+pd.options.mode.chained_assignment = None  # default='warn'
 summaries['summary'] = summaries['summary'].str.replace('[^\w\s]','').str.lower()  ## cleans out puncutation and characters and lower case
 Y = data[['year']]
-
-print summaries.summary
-summaries.summary
-
+Y = np.ravel(Y)
 
 # perform vectorization using Count Vectorizer (counts # of times a word appears)
 vectorizer = CountVectorizer(stop_words='english')
 X = vectorizer.fit_transform(summaries.summary)
 
-# print vectorizer.get_feature_names()[10:]
-
 ## splits test and training data
-xtrain, xtest, ytrain, ytest = train_test_split(X, Y)
+xtrain, xtest, ytrain, ytest = train_test_split(X, Y, test_size=0.5) ## split evenly test and training data
+
 ## fits NB on training data
 bayes = MultinomialNB().fit(xtrain, ytrain)
 

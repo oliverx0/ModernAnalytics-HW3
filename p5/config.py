@@ -16,4 +16,6 @@ FIGURES = os.path.join(__location__, 'figures/') # figure folder
 DEBUG_MAX_COUNT = 3
 BALANCED_COUNT = 6000
 
-
+ROOT = "/Users/rachel/CS5785/ModernAnalyticsHomework3"  ## change for Oliver's computer
+RESULTS = ROOT + "/p5/results.txt"
+RESULTS5F = ROOT + "/p5/results_dimensions.txt"

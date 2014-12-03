@@ -1,0 +1,13 @@
+
+ Achieved accuracy 60.4148148148Ran classifier SGDClassifier
+ Achieved accuracy 60.7851851852Ran classifier Linear SVC
+ Achieved accuracy 62.5407407407Ran classifier SVC Kernel RBF
+ Achieved accuracy 61.162962963Ran classifier PerceptronL1
+ Achieved accuracy 61.1925925926Ran classifier PerceptronL2
+ Achieved accuracy 47.4444444444Ran classifier Nearest Neighbors
+ Achieved accuracy 41.3333333333Ran classifier Ridge Classifier
+
+Ran classifier PerceptronL2    
+ Achieved accuracy 46.4222222222   Ran classifier Nearest Neighbors    
+ Achieved accuracy 17.162962963   Ran classifier Ridge Classifier    
+ Achieved accuracy 41.2296296296   
