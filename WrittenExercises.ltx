@@ -34,26 +34,33 @@ P(Y$\mid$X) = $\frac{P(X \mid Y) P(Y)}{P(Y)}$
 
 \item[1c)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(X_1,X_2, . . . ,X_{|W|} \mid Y)P(Y)}{P(X_1,X_2, . . . ,X_{|W|}) }$
 
-\item[1d)] $P(Y)$ is the probability of decade $C_i$ before X is observed. 
+\item[1d)] $P(Y)$ is the probability of decade $Y_i$ ocurring amongst all the movies, the prior probability.  $P(Y\mid X_i)$ is the probability the movie $i$ is in decade $Y$ given the attributes of movie $i$ (feature vector $X_i$). This is the posterior probability and what we want to maximize, i.e if a movie plot contains "hello", "radio" etc what is the probability of classing that movie as decade Y?. Finally $P(X_i\mid Y)$ are the likelihoods of seeing a particular word $X_i$ in decade $Y$.
+\\
+$P(Y) = \frac{N_y}{N}$ where $N_Y$ is the number of movies in decade $Y$ and $N$ is total number of movies. \\
+$P(X_i\mid Y) = \frac{W_wy}{\sum_{w\in W}W_wy}$ where $W_yw$ is the number of times a word $w$ appears in training reviews from decade $y$, including multiple counts. 
+
 
 \item[1e)] $P(X_1,X_2, . . . ,X_{|W|} \mid Y) = P(X_1 \mid Y)P(X_2,...,X_n\mid Y, X_1)$\\
 $= P(X_1 \mid Y)P(X_2\mid Y, X_1)P(X_3,...,X_n\mid Y, X_1,X_2)$\\
 $= P(X_1 \mid Y)P(X_2\mid Y, X_1)...P(X_{|W|}\mid Y, X_1,X_2, X_3,...,X_{n-1})$
 
-\item[1f)]
+\item[1f)] This is equation is still always true, since we have only applied the chain rule expanding upon our previous equation above. This calculations holds true for the joint probability model and applying the definition of conditional probability over and over again. We have not assumed any independence yet between the random variables. 
 
 \item[1g)]
 
-\item[1h)] The Naive Bayes assumptions means that the features are independent given the class, i.e assumes conditional independence between $X_i$ and $X_j$ for $i\neq j$ given $Y$. It is violated when 
+\item[1h)] The Naive Bayes assumptions means that the features are independent given the class, i.e assumes conditional independence between $X_i$ and $X_j$ for $i\neq j$ given $Y$. It is violated when we have duplicate copies of features across the data set. Here the model would assume that two feature vectors are identical and would consider them both as equal evidence. 
 
 \item[1i)] $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)P(X_1\mid Y)P(X_2\mid Y)P(X_3\mid Y) ...P(X_n\mid Y)}{P(X_1,X_2, . . . ,X_{|W|})}$
 \\
 $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)\prod_{i=1}^n(X_i\mid Y)}{P(X_1,X_2, . . . ,X_{|W|})}$
 \end{enumerate}
 
+\section*{\normalsize{2   TIME FOR SOME DATA}}
+\section*{\normalsize{3  FINDING ICONIC WORDS}}
 \section*{\normalsize{4   THE MOMENT OF TRUTH}}
+
 \begin{enumerate}
-\item[4a)] Using sklearn we achieved an accuracy of nearly 68\%. Our implemented version got an accuracy of 47.79\%. This is more than the 3\% range but we did not include stop words in our own implementation. 
+\item[4a)] Using sklearn we achieved an accuracy of nearly 68\%. Our implemented version got an accuracy of 47.79\%. This is more than the 3\% range but we did not include stop words in our own implementation so there is a chance that we could get closer to sklearn. 
 
 \item[4b)] The underlying difference between them is in the assumptions they make in regards to the distribution of the likelihood probabilities $P(X_i\mid Y)$. Under Gaussian NB, the likleihoods are assumed to be a Gaussian distribution. Multinomial NB assumes a multinomial distribution amongst the conditional probabilities, each feature gets a count associated with it. And finally Bernoulli NB assumes that each feature has a Bernoulli distribution, or that multiple features only take values 0 or 1 (Boolean). The main difference between Bernoulli and Multinomial is that when calculating the probabilities Multinomial distributions ignore that a particular feature $i$ had no count while Bernoulli would associate a penalty with that. The closest one for us would be Multinomial, because we actually keep track of counts of words that appear in each decade, as opposed to just being 0 or 1. Main difference from the our implementation and sklearn's of Multinomial is that they smooth out the occurrences and log probabilities. 
 
@@ -66,7 +73,7 @@ $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)\prod_{i=1}^n(X_i\mid Y)}{P(X_1,X_
 
 \item[5b)] We had to pass \texttt{with\_ mean=False} in our standard scaler because it was throwing an error for sparse matrix data. 
 
-\item[5c)] None of the classifiers outperform sklearn's implementation of Naive Bayes, which had the highest accuracy at 68\%. Our implemented version from problem 2 had an accuracy of 47\%. It only outperforms PerceptronL2 with 25 iterations, Nearest Neighrbors,    
+\item[5c)] None of the classifiers outperform sklearn's implementation of Naive Bayes, which had the highest accuracy at 68\%. Our implemented version from problem 2 had an accuracy of 47\%. It only outperforms PerceptronL2 with 25 iterations, Nearest Neighbors,    
 We write the results to a file called results.txt of all the classifiers and their accuracy. Here are the results:
 \\
 Ran classifier SGDClassifier: achieved accuracy 60.41\% \\
