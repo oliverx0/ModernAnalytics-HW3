@@ -13,9 +13,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def main(output=RESULTS5F):
+def main():
     # load and puts data and desired numpy format
-    movies = load_balanced_movies(MOVIES_DATA, False)
+    movies = load_balanced_movies(MOVIES_DATA, False)  # True is for debugging
     data = pd.DataFrame(movies)
     pd.options.mode.chained_assignment = None  # default='warn'
     summaries = data[['summary']]

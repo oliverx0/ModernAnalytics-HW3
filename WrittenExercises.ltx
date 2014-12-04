@@ -46,7 +46,7 @@ $= P(X_1 \mid Y)P(X_2\mid Y, X_1)...P(X_{|W|}\mid Y, X_1,X_2, X_3,...,X_{n-1})$
 
 \item[1f)] This is equation is still always true, since we have only applied the chain rule expanding upon our previous equation above. This calculations holds true for the joint probability model and applying the definition of conditional probability over and over again. We have not assumed any independence yet between the random variables. 
 
-\item[1g)]
+\item[1g)] $P(X_n | Y, X_1...X_n)$ is hard to compute at test time because it requires us to compute the class-conditional probability for every combination of X. With the conditional independence assumption however, we only have to estimate the conditional probability of each $X_i$ given $Y$. The latter approach is more practical because it does not require a very large training set to obtain a good estimate of probability. 
 
 \item[1h)] The Naive Bayes assumptions means that the features are independent given the class, i.e assumes conditional independence between $X_i$ and $X_j$ for $i\neq j$ given $Y$. It is violated when we have duplicate copies of features across the data set. Here the model would assume that two feature vectors are identical and would consider them both as equal evidence. 
 
@@ -56,25 +56,118 @@ $P(Y\mid X_1,X_2, . . . ,X_{|W|}) = \frac{P(Y)\prod_{i=1}^n(X_i\mid Y)}{P(X_1,X_
 \end{enumerate}
 
 \section*{\normalsize{2   TIME FOR SOME DATA}}
+\begin{enumerate}
+\item[2a)] Plotting the PMF of $P(Y)$ across the entire dataset yields the following result:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_A.png}
+
+\item[2b)]Plotting the PMF of $P(Y\mid X_{'radio'} > 0)$ across the entire data set results in the following:
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_B.png}
+
+\item[2c)]Plotting the PMF of $P(Y\mid X_{'beaver'} > 0)$ across the entire data set results in the following:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_C.png}
+
+\item[2d)]Plotting the PMF of $P(Y\mid X_{'the'} > 0)$ across the entire data set results in the following figure:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_D.png}
+
+One of the issues we encountered was that the data set provided was unbalanced since there were more new movies than old movies. To account for this, we uniformly sampled 6,000 movies across each decade between 1930 and 2010. The function to do this is located in the \texttt{p2/code/utils.py} file and it is called \texttt{load\_balanced\_movies()}. After doing this we repeated the process
+
+\item[2e)]Plotting the PMF of $P(Y\mid X_{'radio'} > 0)$ across the entire data set results in the following figure:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_E.png}
+
+\item[2f)]Plotting the PMF of $P(Y\mid X_{'beaver'} > 0)$ across the balanced data set results in the following figure:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_F.png}
+
+\item[2g)]Plotting the PMF of $P(Y\mid X_{'the'} > 0)$ across the balanced data set results in the following figure:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{FIGURE_G.png}
+
+
+\item[2h)]Comparing these plots we notice that certain words can prove to be informative of a particular decade while others are not. In this example, we can see how the use of the word radio is very representative of the decades 1930 and 1940 and its use decreased considerably in the following decades. Meanwhile, the word is pretty much used in the same frequency  in all decades. Some words like "beaver" are just in between. This helps us identify the possibility of determining what decade a movie belongs to based on the words in their summary.
+
+\item[2i)]The code for implementing a Na•ve Bayes classifier has been implemented in the file p2/I.py. The script loads the balanced data set and then separates it into a test set and a training set based on pair and impair movies. Afterwards it calculates all the probabilities of a word given a decade. This probabilities are then used to calculate the posterior probabilities in the test set to determine the decade a movie belongs to. 
+
+\item[2j)]For the following movies, we plotted $P(Y  = y\mid Movie = m)$ as a histogram over $Y$. Unfortunately, we could only classify one movie correctly! Red histogram indicates \textit{real} decade, while green indicates \textit{predicted} decade:
+\begin{itemize}
+\item Avatar: the movie was incorrectly classified
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{avatar.png}
+
+\item Finding Nemo: the movie was incorrectly classified
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{Finding_Nemo.png}
+
+\item The Matrix: the movie was incorrectly classified
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{the_matrix.png}
+
+\item Gone with the Wild: the movie was correctly classified
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{wind.png}
+
+\item Harry Potter and the Goblet of Fire: the movie was incorrectly classified
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{harry.png}
+\end{itemize}
+
+\item[2k)]The accuracy of our classifier is 47.7\%. The expected accuracy of random chance in the balanced data set is 100/9 = 11.11\%, since 9 is the number of decades. In the case of the unbalanced data set, the expected accuracy of random chance would be biased toward the decades of movies with greatest count, since their probabilities would be affected. 
+
+\item[2l)]The result of plotting the CMC Curve is the following:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{cmc_curve}
+
+\item[2m)] Plotting the confusion matrix yields the following result:
+
+\graphicspath{ {/Users/rachel/CS5785/ModernAnalyticsHomework3/p2/figures/}}
+\includegraphics[scale=0.5]{confusion_matrix}
+
+There are a few interesting things to notice from the confusion matrix. In the first place, in the first decades, the cases in which the predicted decade is not the same as the real decade we can see that the mistakes are not particularly significant. That is, many movies from 1930 were predicted as being from 1940, for example. This makes perfect sense considering that the same types of words were probably used around that time. Moving forward, we can also see that most mistakes occur when the predicted decade is 1970 and the real decade is another one. This also makes a lot of sense, since the decade is right between the biggest and smallest decade, so it shares a lot of words with all other decades.  
+
+\end{enumerate}
+
 \section*{\normalsize{3  FINDING ICONIC WORDS}}
+\begin{enumerate}
+\item[3a)] The 10 most informative words of each decade are the following:
+\begin{itemize}
+\item1930: outlaw, rancher, outlaws, saloon, crooked, foreman, ranchers, rustlers, pal, gangsters\item1940: anita, sloanne, nostalgic, jimmie, stroll, troubadour, hooper, moppet, coleman, outlaw\item1950: beaver, wally, marshal, saloon, huie, troop, laramie, outlaw, lesueur, mathews\item1960: sami, nicole, brady, shawn, philip, marlena, stefano, bo, rafe, chloe, \item1970: cathy, robson, loretta, merle, dixie, grange, rhoda, edith, mcclusky, kathy\item1980: geoff, aden, mitch, nicole, joey, rebecca, alf, tracey, chuckle, goku\item1990: jeanne, jef, odilon, dylan, buffy, phoebe, joey, piper, dawson, valerie\item2000: merel, bones, dixon, olivier, amika, pepper, naomi, gringo, liz, prank\item2010: vick, logger, bramble, briar, vintage, pawn, olivia, explores, rebecca, beverly
+\end{itemize}
+
+\item[3b)]If we strip the 100 most informative words of each decade from the testing summaries, our accuracy degrades to 42\%.
+\end{enumerate}
 \section*{\normalsize{4   THE MOMENT OF TRUTH}}
 
 \begin{enumerate}
 \item[4a)] Using sklearn we achieved an accuracy of nearly 68\%. Our implemented version got an accuracy of 47.79\%. This is more than the 3\% range but we did not include stop words in our own implementation so there is a chance that we could get closer to sklearn. 
 
-\item[4b)] The underlying difference between them is in the assumptions they make in regards to the distribution of the likelihood probabilities $P(X_i\mid Y)$. Under Gaussian NB, the likleihoods are assumed to be a Gaussian distribution. Multinomial NB assumes a multinomial distribution amongst the conditional probabilities, each feature gets a count associated with it. And finally Bernoulli NB assumes that each feature has a Bernoulli distribution, or that multiple features only take values 0 or 1 (Boolean). The main difference between Bernoulli and Multinomial is that when calculating the probabilities Multinomial distributions ignore that a particular feature $i$ had no count while Bernoulli would associate a penalty with that. The closest one for us would be Multinomial, because we actually keep track of counts of words that appear in each decade, as opposed to just being 0 or 1. Main difference from the our implementation and sklearn's of Multinomial is that they smooth out the occurrences and log probabilities. 
+\item[4b)] The underlying difference between them is in the assumptions they make in regards to the distribution of the likelihood probabilities $P(X_i\mid Y)$. Under Gaussian NB, the likleihoods are assumed to be a Gaussian distribution. Multinomial NB assumes a multinomial distribution amongst the conditional probabilities, each feature gets a count associated with it. And finally Bernoulli NB assumes that each feature has a Bernoulli distribution, or that multiple features only take values 0 or 1 (Boolean). The main difference between Bernoulli and Multinomial is that when calculating the probabilities Multinomial distributions ignore that a particular feature $i$ had no count while Bernoulli would associate a penalty with that. The closest one for us would be Multinomial, because we actually keep track of counts of words that appear in each decade, as opposed to just being 0 or 1. Main difference from our implementation and sklearn's Multinomial is that they smooth out the occurrences and log probabilities. 
 
 \end{enumerate}
 
 \section*{\normalsize{5   MAXIMUM MARGIN CLASSIFICATION}}
 
 \begin{enumerate}
-\item[5a)] We chose to use hashing vectorizer for training our bag of words. We chose to use hashing vectorizer from sklearn, with 80,000 features. Our original vector had 120,000 unique features (after eliminating stop words) and we thought that k=80,000 is a decent enough number of features to reduce dimensionality and get good enough fit. For the second part of this question, we also tested out random projections. After defaulting to random projections it reduces our dimensionality from (54000, 118720) to (54000, 9340). 
+\item[5a)] We chose to use hashing vectorizer for training our bag of words. We chose to use hashing vectorizer from sklearn, with 80,000 features. Our original vector had 120,000 unique features (after eliminating stop words) and we thought that k=80,000 is a decent enough number of features to reduce dimensionality and get good enough fit., it choses randomly the words. For the second part of this question, we also tested out random projections. After defaulting to random projections it reduces our dimensionality from (54000, 118720) to (54000, 9340). 
 
 \item[5b)] We had to pass \texttt{with\_ mean=False} in our standard scaler because it was throwing an error for sparse matrix data. 
 
-\item[5c)] None of the classifiers outperform sklearn's implementation of Naive Bayes, which had the highest accuracy at 68\%. Our implemented version from problem 2 had an accuracy of 47\%. It only outperforms PerceptronL2 with 25 iterations, Nearest Neighbors,    
-We write the results to a file called results.txt of all the classifiers and their accuracy. Here are the results:
+\item[5c)] None of the classifiers outperform sklearn's implementation of Naive Bayes, which had the highest accuracy at 68\%. Our implemented version from problem 2 had an accuracy of 47\%. Our implemented version only outperforms PerceptronL2 with 25 iterations, Nearest Neighbors and Ridge Classifier. We write the results to a file called results.txt of all the classifiers and their accuracy. Here are the results:
 \\
 Ran classifier SGDClassifier: achieved accuracy 60.41\% \\
 Ran classifier Linear SVC: achieved accuracy 60.78\% \\ 
@@ -96,7 +189,7 @@ Ran classifier Ridge Classifier: achieved accuracy 41.33\% \\
 \item PerceptronL1: as seen in class this classifier iteratavely runs through all the training samples and it learns by finding errors. Each time a training example has been misclassifies, it adds it to the weight vector to attempt to classify that example again. This one is also computationally efficient because we don't update samples that were correctly classified.  
 
 \item PerceptronL2: Same as above however this one stops after only 25 iterations of the algorithm. That is way the accuracy is so much lower than the fully converged attempt from above. This one also uses the L2 norm or regularization term. 
-\item Nearest Neighbors: This classifiers finds the k nearest neighbors for a new sample point according to shortest distance, and predicts the label of the majority of the adjoining neighbors. The input is $k$ which finds the $k$ nearest neighbors to selected sample, default is 5. 
+\item Nearest Neighbors: This classifiers finds the k nearest neighbors for a new sample point according to shortest distance, and predicts the label of the majority of the adjoining neighbors. The input is $k$ which finds the $k$ nearest neighbors to selected sample, default is 5. On this test set it would predict sequels of movies since most of them would probably have very similar features. 
 
 \item Ridge Classifier: uses ridge regression during training and then classifies an instance according to some threshold. Like in most linear models, we are also training to find a hyperplane to linearly separate the data. Ridge regression/classification also is good at avoiding overfitting by regularizing the weights to keep them small (non-zero but small). As we also saw in lecture Ridge regression with a kernel is a special case of HMSVM with a hinge loss function. 
 

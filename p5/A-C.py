@@ -13,10 +13,11 @@ import numpy as np
 import pandas as pd
 
 def main(output=RESULTS):
+    # change ROOT ID in config.py to your computer's path so that is writes to correct file
     # load and puts data and desired numpy format
-    movies = load_balanced_movies(MOVIES_DATA, False)
+    movies = load_balanced_movies(MOVIES_DATA, False) # True is for debugging
     data = pd.DataFrame(movies)
-    pd.options.mode.chained_assignment = None  # default='warn'
+    pd.options.mode.chained_assignment = None  # default='warn' ignore
     summaries = data[['summary']]
     summaries['summary'] = summaries['summary'].str.replace('[^\w\s]','').str.lower()  ## cleans out puncutation and characters
     Y = np.array(data[['year']])
@@ -64,7 +65,7 @@ def main(output=RESULTS):
         clf.fit(xtrain, ytrain)
         print "Accuracy: %0.2f%%" % (100 * clf.score(xtest, ytest)) # Predict and score accuracy
 
-        with open(output, "a+") as outputFile:
+        with open(output, "a+") as outputFile:  # write results to file 
             score = 100 * clf.score(xtest, ytest) 
             outputFile.write("Ran classifier {}    ".format(name) + '\n'
             " Achieved accuracy {}   ".format(score) )
