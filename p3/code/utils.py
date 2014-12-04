@@ -73,7 +73,6 @@ def draw_PMF2(dictionary, filename, predicted, real, X, Y):
     plt.xlabel(X, fontsize=18)
     plt.ylabel(Y, fontsize=16)
     # plt.show()
-    plt.legend()
     plt.savefig(FIGURES+filename)
     
 #*******************************************
